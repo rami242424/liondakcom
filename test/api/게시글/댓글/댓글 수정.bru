@@ -1,0 +1,17 @@
+meta {
+  name: 댓글 수정
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{URL}}/posts/post_id/replies/reply_id
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "content": "댓글 수정해봅니다."
+  }
+}
