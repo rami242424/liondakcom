@@ -37,7 +37,7 @@ function Header() {
           {auth.isAuthenticated ? (
             <div className="flex items-center">
               <img className="w-8 rounded-full mr-2" src="https://api.fesp.shop/files/00-sample/user-muzi.webp" alt="프로필 이미지" />
-              <span>용쌤님 :)</span>
+              <span>{auth.username}님 :)</span>
               <Button size="md" bgColor="gray" onClick={handleLogout}>로그아웃</Button>
             </div>
           ) : (

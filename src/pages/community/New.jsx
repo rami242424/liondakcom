@@ -1,5 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from 'recoil'; // *추가: Recoil 상태 불러오기
+import { authState } from '../../api/atoms/authAtom'; // *추가: Recoil 상태 불러오기
 import Button from "@components/Button";
 import Submit from "@components/Submit";
 
@@ -7,6 +9,7 @@ function New() {
   const navigate = useNavigate();
   const { type, _id } = useParams();
   const [post, setPost] = useState({ title: "", content: "" });
+  const auth = useRecoilValue(authState); // *추가: Recoil 상태 값 가져오기
 
   useEffect(() => {
     if (_id) {
@@ -33,7 +36,8 @@ function New() {
         id: posts.length + 1,
         title,
         content,
-        author: "용쌤", // 필요에 따라 동적 데이터로 변경 가능
+        // author: "용쌤", // 필요에 따라 동적 데이터로 변경 가능
+        author: auth.isAuthenticated ? auth.username : '게스트', // *변경: 로그인된 사용자 이름 사용
         views: 0,
         comments: 0,
         createdAt: new Date().toLocaleString(),

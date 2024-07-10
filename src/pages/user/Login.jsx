@@ -9,12 +9,16 @@ import { Link } from "react-router-dom";
 function Login() {
   const [email, setEmail] = useState("u1@market.com");
   const [password, setPassword] = useState("11111111");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [emailError, setEmailError] = useState(""); // *추가: 이메일 오류 메시지 상태
+  const [passwordError, setPasswordError] = useState(""); // *추가: 비밀번호 오류 메시지 상태
   const setAuthState = useSetRecoilState(authState); // Recoil 상태 업데이트 함수 가져오기
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
+    setEmailError(""); // *추가: 오류 메시지 초기화
+    setPasswordError(""); // *추가: 오류 메시지 초기화
+
     try {
       const response = await postUserLogin(email, password);
       console.log(response); // 서버 응답 확인
@@ -26,11 +30,19 @@ function Login() {
         setAuthState({ isAuthenticated: true, username }); // *변경: 로그인 상태 업데이트
         navigate('/');
       } else {
-        setErrorMsg("로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.");
+        handleErrors(response); // *추가: 오류 처리 함수 호출
       }
     } catch (error) {
       console.error(error); // 오류 출력
-      setErrorMsg("로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.");
+      handleErrors(error.response); // *추가: 오류 처리 함수 호출
+    }
+  };
+
+  const handleErrors = (response) => {
+    if (response.status === 403) {
+      setEmailError("잘못된 이메일 주소입니다. 이메일 주소를 확인하세요."); // *변경: 이메일 오류 메시지 설정
+    } else if (response.status === 422) {
+      setPasswordError("잘못된 비밀번호입니다. 비밀번호를 확인하세요."); // *변경: 비밀번호 오류 메시지 설정
     }
   };
 
@@ -53,6 +65,7 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               name="email"
             />
+            {emailError && <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">{emailError}</p>} {/* *추가: 이메일 오류 메시지 표시 */}
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 dark:text-gray-200 mb-2" htmlFor="password">비밀번호</label>
@@ -65,9 +78,9 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               name="password"
             />
+            {passwordError && <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">{passwordError}</p>} {/* *추가: 비밀번호 오류 메시지 표시 */}
             <Link to="#" className="block mt-6 ml-auto text-gray-500 text-sm dark:text-gray-300 hover:underline">비밀번호를 잊으셨나요?</Link>
           </div>
-          {errorMsg && <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">{errorMsg}</p>}
           <div className="mt-10 flex justify-center items-center">
             <Submit>로그인</Submit>
             <Link to="/user/signup" className="ml-8 text-gray-800 hover:underline">회원가입</Link>
