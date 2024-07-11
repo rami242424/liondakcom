@@ -5,7 +5,11 @@ import Submit from '@components/Submit';
 function Signup() {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail]= useState('');
+  const [emailError, setEmailError] = useState('');
 
+  // 이름 조건
   const handleNameChange = (event) => {
     const value = event.target.value;
     setName(value);
@@ -17,13 +21,33 @@ function Signup() {
     }
   };
 
+
+  // 이메일 조건
+  const handleEmailChange = (event) => {
+    const value = event.target.value;
+    setEmail(value);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      setEmailError('올바른 이메일 주소를 입력해주세요.');
+    } else {
+      setEmailError('');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (nameError) {
       alert('이름을 올바르게 입력해주세요.');
       return;
     }
+    if (emailError) {
+      alert('올바른 이메일 주소를 입력해주세요.');
+      return;
+    }
+    
   };
+  
 
   return (
     <main className="min-w-80 flex-grow flex items-center justify-center">
@@ -54,7 +78,10 @@ function Signup() {
               placeholder="이메일을 입력하세요"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-orange-400 dark:bg-gray-700"
               name="email"
+              value={email}
+              onChange={handleEmailChange}
             />
+            {emailError && <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">{emailError}</p>} {/* 에러 메시지 출력 */}
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 dark:text-gray-200 mb-2" htmlFor="password">비밀번호</label>
