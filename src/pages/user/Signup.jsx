@@ -6,7 +6,8 @@ function Signup() {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
   const [password, setPassword] = useState('');
-  const [email, setEmail]= useState('');
+  const [passwordError, setPasswordError] = useState(''); // ^_^ 비밀번호 에러 상태 추가
+  const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
   // 이름 조건
@@ -21,7 +22,6 @@ function Signup() {
     }
   };
 
-
   // 이메일 조건
   const handleEmailChange = (event) => {
     const value = event.target.value;
@@ -35,6 +35,18 @@ function Signup() {
     }
   };
 
+  // 비밀번호 조건
+  const handlePasswordChange = (event) => {
+    const value = event.target.value;
+    setPassword(value);
+
+    if (value.length < 8) {
+      setPasswordError('비밀번호는 8자 이상이어야 합니다.');
+    } else {
+      setPasswordError('');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (nameError) {
@@ -45,9 +57,12 @@ function Signup() {
       alert('올바른 이메일 주소를 입력해주세요.');
       return;
     }
-    
+    if (passwordError) {
+      alert('비밀번호를 올바르게 입력해주세요. (8자 이상)');
+      return;
+    }
+    // Add further submission logic here
   };
-  
 
   return (
     <main className="min-w-80 flex-grow flex items-center justify-center">
@@ -88,10 +103,13 @@ function Signup() {
             <input
               type="password"
               id="password"
-              placeholder="비밀번호를 입력하세요"
+              placeholder="비밀번호를 입력하세요 (8자 이상)"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-orange-400 dark:bg-gray-700"
               name="password"
+              value={password}
+              onChange={handlePasswordChange}
             />
+            {passwordError && <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">{passwordError}</p>} {/* ^_^ 비밀번호 에러 메시지 출력 */}
           </div>
 
           <div className="mb-4">
