@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { authState } from '../../api/atoms/authAtom'; // Recoil 상태 불러오기
+import { authState } from '../../api/atoms/authAtom';
 import Submit from "@components/Submit";
 
 function CommentNew({ postId, onAddComment }) {
   const [comment, setComment] = useState("");
-  const auth = useRecoilValue(authState); // Recoil 상태 값 가져오기
+  const auth = useRecoilValue(authState);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -14,7 +14,7 @@ function CommentNew({ postId, onAddComment }) {
       id: Date.now(),
       postId,
       content: comment,
-      author: auth.isAuthenticated ? auth.username : '게스트', // *변경: 로그인된 사용자 이름 사용
+      author: auth.isAuthenticated ? auth.username : '게스트',
       createdAt: new Date().toLocaleString(),
     };
 

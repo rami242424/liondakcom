@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Button from "@components/Button";
+import ListItem from './ListItem';
 
 function List() {
   const navigate = useNavigate();
@@ -41,18 +42,8 @@ function List() {
           </thead>
           <tbody>
             {posts.map((post, index) => (
-              <tr
-                key={post.id} // 여기에서 고유한 키를 사용
-                className="border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out"
-                onClick={() => navigate(`/info/${post.id}`)}
-              >
-                <td className="p-2 text-center">{index + 1}</td>
-                <td className="p-2 truncate indent-4 cursor-pointer">{post.title}</td>
-                <td className="p-2 text-center truncate">{post.author}</td>
-                <td className="p-2 text-center hidden sm:table-cell">{post.views}</td>
-                <td className="p-2 text-center hidden sm:table-cell">{post.comments}</td>
-                <td className="p-2 truncate text-center hidden sm:table-cell">{post.createdAt}</td>
-              </tr>
+              <ListItem key={post.id} post={{ ...post, id: index + 1 }} />
+              // key와 id를 index 기반으로 설정
             ))}
           </tbody>
         </table>
